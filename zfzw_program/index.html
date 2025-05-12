@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吉林省政务咨询平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 首页内容 -->
+        <div id="home-page" class="page">
+            <!-- Header -->
+            <header class="header">
+                <div class="logo-container">
+                    <svg class="logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logoGradient)"/>
+                        <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#fff59d"/>
+                                <stop offset="100%" stop-color="#ffe082"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <h1 class="header-title">吉林省政务咨询平台</h1>
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="#" class="nav-link">首页</a>
+                    <a href="#" class="nav-link">政策解读</a>
+                    <a href="#" class="nav-link">办事指南</a>
+                </nav>
+            </header>
+
+            <!-- 轮播图 -->
+            <div class="carousel-container">
+                <div class="carousel-slides">
+                    <div class="carousel-slide active">
+                        <img src="https://pic.ntimg.cn/file/20220228/6591369_112350904123_2.jpg">
+                        <div class="carousel-overlay"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://tse4-mm.cn.bing.net/th/id/OIP-C.vlcrtIYU74M7GeoPvLYKiAHaFQ?rs=1&pid=ImgDetMain">
+                        <div class="carousel-overlay"></div>
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="https://placehold.co/1200x400/008080/FFFFFF?text=长白山+天池" alt="吉林风光 3">
+                        <div class="carousel-overlay"></div>
+                    </div>
+                </div>
+                
+                <!-- 轮播指示器 -->
+                <div class="carousel-indicators">
+                    <button class="indicator active" data-index="0" aria-label="跳转到幻灯片 1"></button>
+                    <button class="indicator" data-index="1" aria-label="跳转到幻灯片 2"></button>
+                    <button class="indicator" data-index="2" aria-label="跳转到幻灯片 3"></button>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="container">
+                    <div class="title-section">
+                        <h2 class="main-title">政务咨询服务</h2>
+                        <p class="subtitle">提供高效便捷的政务咨询服务平台，助力企业发展与个人事务办理</p>
+                    </div>
+
+                    <div class="services-grid">
+                        <!-- 左侧服务入口 -->
+                        <div class="service-entries">
+                            <div class="service-card business">
+                                <h3 class="service-title">
+                                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    企业用户服务
+                                </h3>
+                                <p class="service-description">
+                                    为企业提供一站式政务咨询解决方案，涵盖政策解读、项目申报、资质办理等全流程服务
+                                </p>
+                                <button class="service-button" data-type="business">
+                                    <span class="button-text">企业用户入口</span>
+                                    <span class="button-overlay"></span>
+                                </button>
+                            </div>
+
+                            <div class="service-card personal">
+                                <h3 class="service-title">
+                                    <svg class="service-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                    个人用户服务
+                                </h3>
+                                <p class="service-description">
+                                    为个人用户提供便捷的政务服务咨询，涵盖社保、医疗、教育等民生领域
+                                </p>
+                                <button class="service-button" data-type="personal">
+                                    <span class="button-text">个人用户入口</span>
+                                    <span class="button-overlay"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 右侧特色服务 -->
+                        <div class="feature-section">
+                            <div class="feature-card">
+                                <h3 class="feature-title">服务特色</h3>
+                                <div class="feature-list">
+                                    <div class="feature-item">
+                                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <div class="feature-content">
+                                            <h4 class="feature-name">7×24小时在线</h4>
+                                            <p class="feature-desc">全年无休提供智能咨询服务</p>
+                                        </div>
+                                    </div>
+                                    <div class="feature-item">
+                                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <div class="feature-content">
+                                            <h4 class="feature-name">多场景覆盖</h4>
+                                            <p class="feature-desc">支持企业/个人双模式切换</p>
+                                        </div>
+                                    </div>
+                                    <div class="feature-item">
+                                        <svg class="feature-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <div class="feature-content">
+                                            <h4 class="feature-name">即时响应</h4>
+                                            <p class="feature-desc">平均响应时间小于1秒</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feature-card">
+                                <h3 class="feature-title">政务热点</h3>
+                                <div class="hot-topics">
+                                    <div class="topic-item">
+                                        <div class="topic-dot"></div>
+                                        <p class="topic-text">企业开办一窗通办</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <div class="topic-dot"></div>
+                                        <p class="topic-text">个人所得税专项扣除</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <div class="topic-dot"></div>
+                                        <p class="topic-text">高新技术企业认定</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <div class="topic-dot"></div>
+                                        <p class="topic-text">城乡居民医保参保登记</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <div class="footer-logo">
+                            <svg class="footer-logo-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#footerLogo)"/>
+                                <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                <defs>
+                                    <linearGradient id="footerLogo" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#fff59d"/>
+                                        <stop offset="100%" stop-color="#ffe082"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <span class="footer-brand">吉林省政务咨询平台</span>
+                        </div>
+                        <div class="copyright">
+                            © 2023 吉林省政务服务和数字化建设管理局 版权所有
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <!-- 聊天页面 -->
+        <div id="chat-page" class="page hidden">
+            <!-- Header -->
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <button id="back-button" class="back-button" aria-label="返回首页">
+                        <svg class="back-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    <h1 id="chat-title" class="chat-title">用户咨询</h1>
+                </div>
+                <div class="online-status">
+                    <div class="status-dot"></div>
+                    <span class="status-text">在线</span>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="chat-messages" class="chat-messages"></div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <div class="input-container">
+                    <input
+                        id="chat-input"
+                        type="text"
+                        placeholder="请输入您的咨询内容..."
+                        class="chat-input"
+                    />
+                    <button id="send-button" class="send-button" disabled>
+                        <span class="send-button-content">
+                            发送
+                            <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="send-button-overlay"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

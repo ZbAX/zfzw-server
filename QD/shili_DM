@@ -1,0 +1,340 @@
+import { useState, useEffect } from 'react';
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [chatHistory, setChatHistory] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+  const [userType, setUserType] = useState('');
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 轮播图数据（实际项目中应替换为真实图片）
+  const slides = [
+    "https://placehold.co/1200x400/008080/FFFFFF?text=长春+净月潭",
+    "https://placehold.co/1200x400/008080/FFFFFF?text=吉林+雾凇",
+    "https://placehold.co/1200x400/008080/FFFFFF?text=长白山+天池"
+  ];
+
+  // 自动轮播
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  const handleSendMessage = () => {
+    if (inputValue.trim()) {
+      const newMessage = {
+        text: inputValue,
+        sender: 'user',
+        timestamp: new Date().toLocaleTimeString()
+      };
+      setChatHistory([...chatHistory, newMessage]);
+      setInputValue('');
+      
+      // 模拟AI回复
+      setTimeout(() => {
+        const botResponse = {
+          text: "您好！您的咨询已收到，我们将尽快为您处理。",
+          sender: 'bot',
+          timestamp: new Date().toLocaleTimeString()
+        };
+        setChatHistory(prev => [...prev, botResponse]);
+      }, 1000);
+    }
+  };
+
+  const startChat = (type) => {
+    setUserType(type);
+    setCurrentPage('chat');
+    setChatHistory([{
+      text: `欢迎${type === 'business' ? '企业用户' : '个人用户'}！请提出您的政务相关问题`,
+      sender: 'bot',
+      timestamp: new Date().toLocaleTimeString()
+    }]);
+  };
+
+  const renderHome = () => (
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-700 to-red-500 text-white">
+      {/* Header */}
+      <header className="p-4 flex items-center justify-between relative">
+        <div className="flex items-center space-x-2">
+          <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logoGradient)"/>
+            <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+            <defs>
+              <linearGradient id="logoGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fff59d"/>
+                <stop offset="100%" stopColor="#ffe082"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <h1 className="text-2xl font-bold tracking-tight">吉林省政务咨询平台</h1>
+        </div>
+        
+        <div className="hidden md:flex space-x-6">
+          <a href="#" className="hover:text-yellow-300 transition-all hover:scale-105">首页</a>
+          <a href="#" className="hover:text-yellow-300 transition-all hover:scale-105">政策解读</a>
+          <a href="#" className="hover:text-yellow-300 transition-all hover:scale-105">办事指南</a>
+        </div>
+      </header>
+
+      {/* 轮播图 */}
+      <div className="relative h-64 md:h-96 overflow-hidden">
+        {slides.map((slide, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img 
+              src={slide} 
+              alt={`吉林风光 ${index + 1}`} 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+          </div>
+        ))}
+        
+        {/* 轮播指示器 */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all ${
+                index === currentSlide ? 'bg-yellow-300 w-8' : 'bg-white/50 hover:bg-white/70'
+              }`}
+              aria-label={`跳转到幻灯片 ${index + 1}`}
+            ></button>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <main className="flex-grow container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-white">
+              政务咨询服务
+            </h2>
+            <p className="text-xl md:text-2xl text-red-100 max-w-3xl mx-auto">
+              提供高效便捷的政务咨询服务平台，助力企业发展与个人事务办理
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* 左侧服务入口 */}
+            <div className="space-y-8">
+              <div className="bg-red-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-red-700/50">
+                <h3 className="text-2xl font-bold mb-6 flex items-center">
+                  <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                  企业用户服务
+                </h3>
+                <p className="text-red-100 mb-8">
+                  为企业提供一站式政务咨询解决方案，涵盖政策解读、项目申报、资质办理等全流程服务
+                </p>
+                <button 
+                  onClick={() => startChat('business')}
+                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-300 text-red-900 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                >
+                  <span className="relative z-10">企业用户入口</span>
+                  <span className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </button>
+              </div>
+
+              <div className="bg-red-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-red-700/50">
+                <h3 className="text-2xl font-bold mb-6 flex items-center">
+                  <svg className="w-6 h-6 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                  个人用户服务
+                </h3>
+                <p className="text-red-100 mb-8">
+                  为个人用户提供便捷的政务服务咨询，涵盖社保、医疗、教育等民生领域
+                </p>
+                <button 
+                  onClick={() => startChat('personal')}
+                  className="group relative overflow-hidden px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-300 text-red-900 rounded-xl font-medium text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                >
+                  <span className="relative z-10">个人用户入口</span>
+                  <span className="absolute inset-0 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                </button>
+              </div>
+            </div>
+
+            {/* 右侧特色服务 */}
+            <div className="space-y-8">
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-red-700/30">
+                <h3 className="text-2xl font-bold mb-6 text-yellow-300">服务特色</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start space-x-3">
+                    <svg className="w-6 h-6 text-yellow-300 mt-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13L9 17L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <h4 className="font-semibold">7×24小时在线</h4>
+                      <p className="text-sm text-red-100">全年无休提供智能咨询服务</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <svg className="w-6 h-6 text-yellow-300 mt-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13L9 17L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <h4 className="font-semibold">多场景覆盖</h4>
+                      <p className="text-sm text-red-100">支持企业/个人双模式切换</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <svg className="w-6 h-6 text-yellow-300 mt-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 13L9 17L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div>
+                      <h4 className="font-semibold">即时响应</h4>
+                      <p className="text-sm text-red-100">平均响应时间小于1秒</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-xl border border-red-700/30">
+                <h3 className="text-2xl font-bold mb-6 text-yellow-300">政务热点</h3>
+                <div className="space-y-3">
+                  {[
+                    "企业开办一窗通办",
+                    "个人所得税专项扣除",
+                    "高新技术企业认定",
+                    "城乡居民医保参保登记"
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center space-x-2 group cursor-pointer">
+                      <div className="w-2 h-2 rounded-full bg-yellow-300 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <p className="text-red-100 group-hover:text-white transition-colors">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-red-800/70 backdrop-blur-sm border-t border-red-700 text-white p-8">
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#footerLogo)"/>
+                <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                <defs>
+                  <linearGradient id="footerLogo" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#fff59d"/>
+                    <stop offset="100%" stopColor="#ffe082"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <span className="font-bold">吉林省政务咨询平台</span>
+            </div>
+            <div className="text-sm text-red-200">
+              © 2023 吉林省政务服务和数字化建设管理局 版权所有
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+
+  const renderChat = () => (
+    <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex flex-col">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-red-700 to-red-900 text-white p-4 flex items-center justify-between shadow-lg">
+        <div className="flex items-center space-x-3">
+          <button 
+            onClick={() => setCurrentPage('home')} 
+            className="text-white hover:text-yellow-300 transition-colors p-2 rounded-full hover:bg-white/20"
+            aria-label="返回首页"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <h1 className="text-xl font-bold">
+            {userType === 'business' ? '企业用户咨询' : '个人用户咨询'}
+          </h1>
+        </div>
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+          <span className="text-sm">在线</span>
+        </div>
+      </div>
+
+      {/* Chat Area */}
+      <div className="flex-grow overflow-y-auto p-4 space-y-4">
+        {chatHistory.map((msg, index) => (
+          <div 
+            key={index} 
+            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div 
+              className={`max-w-xs md:max-w-md lg:max-w-lg rounded-2xl p-4 ${
+                msg.sender === 'user' 
+                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white rounded-tr-none' 
+                  : 'bg-white text-gray-800 rounded-tl-none shadow-md'
+              }`}
+            >
+              <p>{msg.text}</p>
+              <div className="text-xs mt-1 opacity-70 text-right">
+                {msg.timestamp}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Input Area */}
+      <div className="bg-white border-t border-red-200 p-4 shadow-lg">
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            placeholder="请输入您的咨询内容..."
+            className="flex-grow p-4 border border-red-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all shadow-sm"
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={!inputValue.trim()}
+            className={`group bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-xl font-medium transition-all transform hover:scale-105 hover:shadow-lg ${
+              inputValue.trim() 
+                ? 'opacity-100 cursor-pointer' 
+                : 'opacity-50 cursor-not-allowed'
+            } flex items-center justify-center`}
+          >
+            <span className="relative z-10 flex items-center">
+              发送
+              <svg className="w-5 h-5 ml-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </span>
+            <span className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="font-sans antialiased">
+      {currentPage === 'home' ? renderHome() : renderChat()}
+    </div>
+  );
+}
