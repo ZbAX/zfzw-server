@@ -18,14 +18,29 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatHistory = [];
     let isWaitingForResponse = false;
     
-    // 后端API URL
+    // 后端API URL - 支持多种域名/IP地址
     const API_BASE_URL = 'http://localhost:3000';
+    // 首先尝试连接API，确认服务是否可用
+    checkApiConnection();
     
     // 初始化轮播图
     initCarousel();
 
     // 初始化事件监听器
     initEventListeners();
+
+    // 检查API连接
+    async function checkApiConnection() {
+        try {
+            console.log('正在检查API连接...');
+            const response = await fetch(`${API_BASE_URL}/api/test`);
+            const data = await response.json();
+            console.log('API连接成功:', data);
+        } catch (error) {
+            console.error('API连接失败:', error);
+            // 可以在这里显示错误提示或添加重试逻辑
+        }
+    }
 
     // 轮播图初始化函数
     function initCarousel() {
@@ -141,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             try {
                 if (userType === 'business') {
+                    console.log('发送企业咨询请求:', text);
                     // 企业用户咨询API
                     const response = await fetch(`${API_BASE_URL}/api/business-consult`, {
                         method: 'POST',
@@ -150,7 +166,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         body: JSON.stringify({ input: text })
                     });
                     
+                    console.log('收到响应状态:', response.status);
                     const data = await response.json();
+                    console.log('收到响应数据:', data);
                     
                     // 移除骨架屏
                     removeSkeletonLoader();
@@ -163,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             timestamp: new Date().toLocaleTimeString(),
                             isMarkdown: true
                         };
-                        
+            
                         // 添加机器人回复到聊天历史
                         addMessage(botResponse);
                     } else {
@@ -178,13 +196,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 移除骨架屏
                     removeSkeletonLoader();
                     
-                    const botResponse = {
+                const botResponse = {
                         text: "您好！您的个人咨询已收到，我们将尽快为您处理。\n\n目前个人用户咨询功能正在完善中，敬请期待。",
-                        sender: 'bot',
-                        timestamp: new Date().toLocaleTimeString()
-                    };
-                    
-                    addMessage(botResponse);
+                    sender: 'bot',
+                    timestamp: new Date().toLocaleTimeString()
+                };
+                
+                addMessage(botResponse);
                 }
             } catch (error) {
                 console.error('API请求失败:', error);
@@ -193,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 removeSkeletonLoader();
                 
                 // 添加错误消息
-                addErrorMessage('网络错误，请稍后重试');
+                addErrorMessage('网络错误，请稍后重试或检查服务器是否启动');
             } finally {
                 // 重置等待状态
                 isWaitingForResponse = false;
@@ -220,9 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         skeletonElement.appendChild(messageBubble);
         chatMessages.appendChild(skeletonElement);
-        
-        // 自动滚动到底部
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // 自动滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     // 移除骨架屏加载动画
@@ -281,8 +299,8 @@ document.addEventListener('DOMContentLoaded', function() {
             messageBubble.appendChild(markdownContainer);
         } else {
             // 普通文本消息
-            const messageText = document.createElement('p');
-            messageText.textContent = message.text;
+        const messageText = document.createElement('p');
+        messageText.textContent = message.text;
             messageBubble.appendChild(messageText);
         }
         
