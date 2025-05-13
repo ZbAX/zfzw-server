@@ -35,6 +35,66 @@ body {
     padding: 0 15px;
 }
 
+/* API错误消息横幅 */
+.api-error-banner {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+    background-color: #ffebee;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slide-down 0.5s ease-out;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.api-error-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.api-error-content strong {
+    color: #b71c1c;
+    font-size: 1rem;
+}
+
+.api-error-content p {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.api-error-content .close-button {
+    align-self: flex-end;
+    background-color: #b71c1c;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.api-error-content .close-button:hover {
+    background-color: #8b0000;
+}
+
 /* 首页样式 */
 #home-page {
     background: linear-gradient(135deg, #8B0000, #B22222, #CD5C5C);

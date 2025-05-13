@@ -18,8 +18,22 @@ document.addEventListener('DOMContentLoaded', function() {
     let chatHistory = [];
     let isWaitingForResponse = false;
     
-    // 后端API URL - 支持多种域名/IP地址
-    const API_BASE_URL = 'http://localhost:3000';
+    // 后端API URL - 根据当前环境选择合适的API地址
+    // 本地开发: http://localhost:3000
+    // 线上环境: https://zfzw-api.herokuapp.com 或其他云平台地址
+    let API_BASE_URL = '';
+    
+    // 根据当前域名判断使用哪个API地址
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        // 本地开发环境
+        API_BASE_URL = 'http://localhost:3000';
+        console.log('使用本地API地址:', API_BASE_URL);
+    } else {
+        // 线上环境 - 使用render.com、railway.app或其他云平台部署的后端
+        API_BASE_URL = 'https://zfzw-api.onrender.com'; // 这个地址需要替换为您实际部署的后端地址
+        console.log('使用线上API地址:', API_BASE_URL);
+    }
+    
     // 首先尝试连接API，确认服务是否可用
     checkApiConnection();
     
@@ -33,13 +47,60 @@ document.addEventListener('DOMContentLoaded', function() {
     async function checkApiConnection() {
         try {
             console.log('正在检查API连接...');
-            const response = await fetch(`${API_BASE_URL}/api/test`);
+            // 添加超时处理
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
+            
+            const response = await fetch(`${API_BASE_URL}/api/test`, {
+                signal: controller.signal
+            }).catch(error => {
+                if (error.name === 'AbortError') {
+                    throw new Error('API请求超时，服务可能不可用');
+                }
+                throw error;
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`API响应状态异常: ${response.status}`);
+            }
+            
             const data = await response.json();
             console.log('API连接成功:', data);
         } catch (error) {
-            console.error('API连接失败:', error);
-            // 可以在这里显示错误提示或添加重试逻辑
+            console.error('API连接失败:', error.message);
+            // 显示友好的错误信息
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                showAPIErrorMessage();
+            }
         }
+    }
+    
+    // 显示API错误信息
+    function showAPIErrorMessage() {
+        const errorElement = document.createElement('div');
+        errorElement.className = 'api-error-banner';
+        errorElement.innerHTML = `
+            <div class="api-error-content">
+                <strong>网络连接提示</strong>
+                <p>后端服务暂时不可用，请稍后再试或联系管理员。</p>
+                <button class="close-button">关闭</button>
+            </div>
+        `;
+        document.body.appendChild(errorElement);
+        
+        // 添加关闭按钮事件
+        errorElement.querySelector('.close-button').addEventListener('click', () => {
+            errorElement.remove();
+        });
+        
+        // 5秒后自动消失
+        setTimeout(() => {
+            if (errorElement.parentNode) {
+                errorElement.remove();
+            }
+        }, 5000);
     }
 
     // 轮播图初始化函数
@@ -157,16 +218,34 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 if (userType === 'business') {
                     console.log('发送企业咨询请求:', text);
+                    
+                    // 设置请求超时
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超时
+                    
                     // 企业用户咨询API
                     const response = await fetch(`${API_BASE_URL}/api/business-consult`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ input: text })
+                        body: JSON.stringify({ input: text }),
+                        signal: controller.signal
+                    }).catch(error => {
+                        if (error.name === 'AbortError') {
+                            throw new Error('请求超时，服务可能暂时不可用');
+                        }
+                        throw error;
                     });
                     
+                    clearTimeout(timeoutId);
+                    
                     console.log('收到响应状态:', response.status);
+                    
+                    if (!response.ok) {
+                        throw new Error(`服务器响应异常: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     console.log('收到响应数据:', data);
                     
@@ -196,22 +275,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 移除骨架屏
                     removeSkeletonLoader();
                     
-                const botResponse = {
+                    const botResponse = {
                         text: "您好！您的个人咨询已收到，我们将尽快为您处理。\n\n目前个人用户咨询功能正在完善中，敬请期待。",
-                    sender: 'bot',
-                    timestamp: new Date().toLocaleTimeString()
-                };
+                        sender: 'bot',
+                        timestamp: new Date().toLocaleTimeString()
+                    };
                 
-                addMessage(botResponse);
+                    addMessage(botResponse);
                 }
             } catch (error) {
-                console.error('API请求失败:', error);
+                console.error('API请求失败:', error.message);
                 
                 // 移除骨架屏
                 removeSkeletonLoader();
                 
                 // 添加错误消息
-                addErrorMessage('网络错误，请稍后重试或检查服务器是否启动');
+                if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                    addErrorMessage('网络错误，后端服务可能暂时不可用，请稍后再试');
+                } else {
+                    addErrorMessage('网络错误，请稍后重试或检查服务器是否启动');
+                }
             } finally {
                 // 重置等待状态
                 isWaitingForResponse = false;
@@ -239,8 +322,8 @@ document.addEventListener('DOMContentLoaded', function() {
         skeletonElement.appendChild(messageBubble);
         chatMessages.appendChild(skeletonElement);
                 
-                // 自动滚动到底部
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+        // 自动滚动到底部
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     // 移除骨架屏加载动画
@@ -299,8 +382,8 @@ document.addEventListener('DOMContentLoaded', function() {
             messageBubble.appendChild(markdownContainer);
         } else {
             // 普通文本消息
-        const messageText = document.createElement('p');
-        messageText.textContent = message.text;
+            const messageText = document.createElement('p');
+            messageText.textContent = message.text;
             messageBubble.appendChild(messageText);
         }
         
