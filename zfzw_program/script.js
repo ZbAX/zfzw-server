@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 后端API URL - 根据当前环境选择合适的API地址
     // 本地开发: http://localhost:3000
-    // 线上环境: https://zfzw-api.herokuapp.com 或其他云平台地址
+    // 线上环境: https://zfzw-server-2.onrender.com
     let API_BASE_URL = '';
     
     // 根据当前域名判断使用哪个API地址
@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', function() {
         API_BASE_URL = 'http://localhost:3000';
         console.log('使用本地API地址:', API_BASE_URL);
     } else {
-        // 线上环境 - 使用render.com、railway.app或其他云平台部署的后端
-        API_BASE_URL = 'https://zfzw-api.onrender.com'; // 这个地址需要替换为您实际部署的后端地址
+        // 线上环境 - 使用 Render 部署的后端
+        API_BASE_URL = 'https://zfzw-server-2.onrender.com';
         console.log('使用线上API地址:', API_BASE_URL);
     }
     
